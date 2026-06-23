@@ -46,28 +46,26 @@ const matches = (post: SitePost, query: string, category: string, task: string) 
     .some((value) => compactText(value).includes(query))
 }
 
-function SearchResultCard({ post, index }: { post: SitePost; index: number }) {
+function SearchResultCard({ post }: { post: SitePost; index: number }) {
   const task = getPostTaskKey(post) as TaskKey | null
   const href = task ? buildPostUrl(task, post.slug) : `/article/${post.slug}`
   const image = getImage(post)
   const summary = summaryOf(post)
-  const taskLabel = SITE_CONFIG.tasks.find((item) => item.key === task)?.label || 'Post'
-  const strong = index % 5 === 0
+  const taskLabel = SITE_CONFIG.tasks.find((item) => item.key === task)?.label || 'Release'
 
   return (
-    <Link href={href} className={`group block overflow-hidden border-b border-r border-black bg-white ${strong ? 'md:col-span-2' : ''}`}>
+    <Link href={href} data-reveal className="group flex flex-col overflow-hidden rounded-3xl border border-[var(--editable-border)] bg-white shadow-[0_14px_40px_rgba(26,20,34,0.07)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_28px_60px_rgba(26,20,34,0.16)]">
       {image ? (
-        <div className={`relative overflow-hidden bg-black ${strong ? 'aspect-[16/7]' : 'aspect-[16/10]'}`}>
-          <img src={image} alt="" className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-          <span className="absolute left-4 top-4 bg-[#c92f2f] px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-white">{taskLabel}</span>
+        <div className="beacon-zoom relative aspect-[16/10] overflow-hidden bg-[var(--slot4-media-bg)]">
+          <img src={image} alt="" className="h-full w-full object-cover" />
+          <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.12em] text-[var(--slot4-accent-strong)] shadow-sm">{taskLabel}</span>
         </div>
       ) : null}
-      <div className="p-5 sm:p-6">
-        {!image ? <span className="bg-[#c92f2f] px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-white">{taskLabel}</span> : null}
-        <h2 className="editorial-serif mt-4 line-clamp-3 text-2xl font-black leading-[1.03] tracking-[-0.035em] text-black">{post.title}</h2>
-        {summary ? <p className="mt-4 line-clamp-3 text-sm font-semibold leading-7 text-[var(--editable-page-text,#211713)]/65">{summary}</p> : null}
-        <span className="mt-5 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] opacity-60 group-hover:opacity-100">Open result <ArrowRight className="h-4 w-4" /></span>
+      <div className="flex flex-1 flex-col p-6">
+        {!image ? <span className="inline-flex w-fit rounded-full bg-[var(--slot4-accent-soft)] px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.12em] text-[var(--slot4-accent-strong)]">{taskLabel}</span> : null}
+        <h2 className="beacon-display mt-3 line-clamp-2 text-xl font-extrabold leading-snug tracking-[-0.02em] transition group-hover:text-[var(--slot4-accent)]">{post.title}</h2>
+        {summary ? <p className="mt-3 line-clamp-3 flex-1 text-sm leading-7 text-[var(--slot4-muted-text)]">{summary}</p> : null}
+        <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[var(--slot4-accent)]">Open result <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" /></span>
       </div>
     </Link>
   )
@@ -87,52 +85,56 @@ export default async function SearchPage({ searchParams }: { searchParams?: Prom
 
   return (
     <EditableSiteShell>
-      <main className="min-h-screen bg-[#f7f4ef] text-black">
-        <section className="mx-auto max-w-[var(--editable-container)] border-x border-black bg-[#f7f4ef]">
-          <div className="grid border-b border-black bg-white md:grid-cols-[0.8fr_1.2fr]">
-            <div>
-              <div className="h-full bg-[#c92f2f] p-7 text-white sm:p-10 lg:p-14">
-                <p className="text-xs font-black uppercase tracking-[0.28em]">{pagesContent.search.hero.badge}</p>
-                <h1 className="editorial-brand mt-5 text-6xl font-black leading-[0.9] tracking-[-0.055em] sm:text-8xl">{pagesContent.search.hero.title}</h1>
-                <p className="mt-6 max-w-xl text-base font-semibold leading-8 text-white/75">{pagesContent.search.hero.description}</p>
-              </div>
-            </div>
-            <form action="/search" className="self-center p-6 sm:p-10 lg:p-14">
+      <main className="min-h-screen bg-[var(--slot4-page-bg)] text-[var(--slot4-page-text)]">
+        {/* hero + search */}
+        <section className="relative overflow-hidden">
+          <div className="pointer-events-none absolute -right-40 -top-40 h-[32rem] w-[32rem] rounded-full bg-[var(--slot4-accent)] opacity-[0.09] blur-[130px]" />
+          <div className="relative mx-auto w-full max-w-[var(--editable-container)] px-4 pb-6 pt-16 text-center sm:px-6 lg:px-8 sm:pt-20" data-reveal>
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-[var(--slot4-accent)]">{pagesContent.search.hero.badge}</p>
+            <h1 className="beacon-display mx-auto mt-4 max-w-4xl text-[2.7rem] font-extrabold leading-[0.98] tracking-[-0.045em] sm:text-6xl">{pagesContent.search.hero.title}</h1>
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-[var(--slot4-muted-text)] sm:text-lg">{pagesContent.search.hero.description}</p>
+
+            <form action="/search" className="mx-auto mt-8 max-w-2xl">
               <input type="hidden" name="master" value="1" />
-              <label className="flex items-center gap-3 border border-black bg-white px-4 py-3">
-                <Search className="h-5 w-5 opacity-45" />
-                <input name="q" defaultValue={query} placeholder={pagesContent.search.hero.placeholder} className="min-w-0 flex-1 bg-transparent text-base font-bold outline-none placeholder:text-current/35" />
+              <label className="flex items-center gap-2 rounded-full border border-[var(--editable-border)] bg-white p-1.5 shadow-[0_14px_40px_rgba(26,20,34,0.07)]">
+                <Search className="ml-3 h-5 w-5 text-[var(--slot4-soft-muted-text)]" />
+                <input name="q" defaultValue={query} placeholder={pagesContent.search.hero.placeholder} className="min-w-0 flex-1 bg-transparent px-2 py-2.5 text-sm outline-none placeholder:text-[var(--slot4-soft-muted-text)]" />
+                <button className="rounded-full bg-[var(--slot4-accent)] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-[var(--slot4-accent-strong)]" type="submit">Search</button>
               </label>
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                <label className="flex items-center gap-2 border border-black bg-white px-4 py-3">
-                  <Filter className="h-4 w-4 opacity-45" />
-                  <input name="category" defaultValue={category} placeholder="Category" className="min-w-0 flex-1 bg-transparent text-sm font-bold outline-none placeholder:text-current/35" />
+              <div className="mx-auto mt-3 grid max-w-xl gap-3 sm:grid-cols-2">
+                <label className="flex items-center gap-2 rounded-full border border-[var(--editable-border)] bg-white px-4 py-2.5">
+                  <Filter className="h-4 w-4 text-[var(--slot4-soft-muted-text)]" />
+                  <input name="category" defaultValue={category} placeholder="Filter by channel" className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[var(--slot4-soft-muted-text)]" />
                 </label>
-                <select name="task" defaultValue={task} className="border border-black bg-white px-4 py-3 text-sm font-black outline-none">
+                <select name="task" defaultValue={task} className="rounded-full border border-[var(--editable-border)] bg-white px-4 py-2.5 text-sm font-semibold outline-none">
                   <option value="">All content types</option>
                   {enabledTasks.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
                 </select>
               </div>
-              <button className="mt-3 inline-flex h-12 w-full items-center justify-center border border-black bg-black px-6 text-xs font-black uppercase tracking-[0.18em] text-white transition hover:bg-[#c92f2f]" type="submit">Search</button>
             </form>
           </div>
+        </section>
 
-          <div className="flex flex-wrap items-end justify-between gap-4 border-b-4 border-black px-4 py-8 sm:px-6 lg:px-8">
+        {/* results */}
+        <section className="mx-auto w-full max-w-[var(--editable-container)] px-4 pb-20 pt-6 sm:px-6 lg:px-8">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.24em] opacity-50">{results.length} results</p>
-              <h2 className="editorial-brand mt-2 text-4xl font-black tracking-[-0.04em]">{query ? `Results for “${query}”` : pagesContent.search.resultsTitle}</h2>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--slot4-soft-muted-text)]">{results.length} results</p>
+              <h2 className="beacon-display mt-1 text-2xl font-extrabold tracking-[-0.02em]">{query ? `Results for “${query}”` : pagesContent.search.resultsTitle}</h2>
             </div>
-            <Link href="/article" className="inline-flex items-center gap-2 border border-black bg-white px-5 py-3 text-xs font-black uppercase">Browse latest <ArrowRight className="h-4 w-4" /></Link>
+            <Link href="/updates" className="inline-flex items-center gap-2 text-sm font-bold text-[var(--slot4-accent)] transition hover:gap-3">Browse latest <ArrowRight className="h-4 w-4" /></Link>
           </div>
 
           {results.length ? (
-            <div className="grid border-l border-t border-black md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
               {results.map((post, index) => <SearchResultCard key={post.id || post.slug} post={post} index={index} />)}
             </div>
           ) : (
-            <div className="m-8 border border-dashed border-black bg-white p-10 text-center">
-              <p className="text-2xl font-black tracking-[-0.04em]">No matching posts found.</p>
-              <p className="mt-3 text-sm font-semibold opacity-60">Try a different keyword, task type, or category.</p>
+            <div className="mx-auto max-w-xl rounded-3xl border border-dashed border-[var(--editable-border)] bg-white p-12 text-center">
+              <Search className="mx-auto h-8 w-8 text-[var(--slot4-accent)]" />
+              <p className="beacon-display mt-4 text-2xl font-extrabold tracking-[-0.02em]">No matching releases found</p>
+              <p className="mt-2 text-sm text-[var(--slot4-muted-text)]">Try a different keyword, channel, or content type — or browse the latest releases.</p>
+              <Link href="/updates" className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--editable-border)] bg-white px-6 py-3 text-sm font-bold transition hover:border-[var(--slot4-accent)] hover:text-[var(--slot4-accent)]">Browse the newsroom <ArrowRight className="h-4 w-4" /></Link>
             </div>
           )}
         </section>
