@@ -1,41 +1,59 @@
 'use client'
 
-import { FileText, Mail, Megaphone } from 'lucide-react'
+import { Clock, FileText, Mail, Megaphone, ShieldCheck } from 'lucide-react'
 import { pagesContent } from '@/editable/content/pages.content'
 import { EditableContactLeadForm } from '@/editable/components/EditableContactLeadForm'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
+import { editableDesignContract as dc, editablePalette as pal } from '@/editable/layouts/design-contract'
 
 const desks = [
-  { icon: FileText, title: 'Editorial desk', body: 'Send story ideas, corrections, source material, and publication questions.' },
+  { icon: FileText, title: 'Editorial desk', body: 'Send story ideas, embargoes, source material, and publication questions.' },
   { icon: Megaphone, title: 'Media partnerships', body: 'Discuss distribution, syndication, newsroom collaborations, and campaigns.' },
-  { icon: Mail, title: 'General support', body: 'Reach the team for account, publishing, or site-related help.' },
+  { icon: Mail, title: 'General support', body: 'Reach the team for account, publishing, or platform help.' },
+]
+
+const trust = [
+  { icon: Clock, title: 'Fast response', body: 'Most messages get a reply within one business day.' },
+  { icon: ShieldCheck, title: 'Real humans', body: 'No bots — your request is routed to the right desk.' },
 ]
 
 export default function ContactPage() {
+  const contact = pagesContent.contact
   return (
     <EditableSiteShell>
-      <main className="bg-[#f7f4ef] text-[#111]">
-        <section className="border-b border-black bg-white">
-          <div className="mx-auto max-w-[var(--editable-container)] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-            <p className="text-xs font-black uppercase tracking-[0.28em] text-[#c92f2f]">{pagesContent.contact.eyebrow}</p>
-            <h1 className="editorial-brand mt-4 max-w-5xl text-6xl font-black leading-[0.92] tracking-[-0.055em] sm:text-8xl">{pagesContent.contact.title}</h1>
-            <p className="mt-6 max-w-2xl border-l-4 border-[#c92f2f] pl-5 text-base font-semibold leading-8 text-black/65">{pagesContent.contact.description}</p>
+      <main className={`${pal.pageBg} ${pal.pageText}`}>
+        <section className="relative overflow-hidden">
+          <div className="pointer-events-none absolute -right-40 -top-40 h-[32rem] w-[32rem] rounded-full bg-[var(--slot4-accent)] opacity-[0.09] blur-[130px]" />
+          <div className={`relative ${dc.shell.section} pb-6 pt-16 text-center sm:pt-20`} data-reveal>
+            <p className={`${dc.type.eyebrow} ${pal.accentText}`}>{contact.eyebrow}</p>
+            <h1 className={`mx-auto mt-4 max-w-4xl ${dc.type.heroTitle}`}>{contact.title}</h1>
+            <p className={`mx-auto mt-5 max-w-2xl text-base leading-8 ${pal.mutedText} sm:text-lg`}>{contact.description}</p>
           </div>
         </section>
 
-        <section className="mx-auto grid max-w-[var(--editable-container)] border-x border-black bg-white lg:grid-cols-[0.72fr_1.28fr]">
-          <aside className="border-b border-black bg-[#171717] text-white lg:border-b-0 lg:border-r">
-            {desks.map((desk, index) => (
-              <div key={desk.title} className="border-b border-white/25 p-7 last:border-b-0 sm:p-9">
-                <div className="flex items-center justify-between"><desk.icon className="h-5 w-5 text-[#f34a43]" /><span className="text-xs font-black text-white/45">0{index + 1}</span></div>
-                <h2 className="editorial-serif mt-6 text-3xl font-black">{desk.title}</h2>
-                <p className="mt-3 text-sm leading-7 text-white/65">{desk.body}</p>
+        <section className={`${dc.shell.section} grid gap-8 pb-20 lg:grid-cols-[0.85fr_1.15fr]`}>
+          <aside className="space-y-4" data-reveal>
+            {desks.map((desk) => (
+              <div key={desk.title} className={`rounded-3xl border ${pal.border} ${pal.surfaceBg} p-6 ${pal.shadow}`}>
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--slot4-accent-soft)] text-[var(--slot4-accent)]"><desk.icon className="h-5 w-5" /></span>
+                <h2 className="beacon-display mt-4 text-lg font-extrabold tracking-[-0.02em]">{desk.title}</h2>
+                <p className={`mt-2 text-sm leading-7 ${pal.mutedText}`}>{desk.body}</p>
               </div>
             ))}
+            <div className="grid gap-4 sm:grid-cols-2">
+              {trust.map((item) => (
+                <div key={item.title} className="rounded-3xl border border-[var(--editable-border)] bg-[var(--slot4-panel-bg)] p-5">
+                  <item.icon className="h-5 w-5 text-[var(--slot4-accent)]" />
+                  <h3 className="mt-3 text-sm font-extrabold">{item.title}</h3>
+                  <p className={`mt-1 text-xs leading-6 ${pal.softMutedText}`}>{item.body}</p>
+                </div>
+              ))}
+            </div>
           </aside>
-          <div className="p-6 sm:p-10 lg:p-14">
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-[#c92f2f]">Send a message</p>
-            <h2 className="editorial-serif mt-3 text-4xl font-black">{pagesContent.contact.formTitle}</h2>
+
+          <div className={`rounded-[2rem] border ${pal.border} ${pal.surfaceBg} p-6 ${pal.shadow} sm:p-10`} data-reveal>
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-[var(--slot4-accent-strong)]">Send a message</p>
+            <h2 className="beacon-display mt-3 text-3xl font-extrabold tracking-[-0.02em]">{contact.formTitle}</h2>
             <EditableContactLeadForm />
           </div>
         </section>
