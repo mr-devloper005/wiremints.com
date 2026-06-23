@@ -1,44 +1,85 @@
 import Link from 'next/link'
-import { SITE_CONFIG } from '@/lib/site-config'
+import { ArrowRight, Compass, Sparkles, Target } from 'lucide-react'
 import { pagesContent } from '@/editable/content/pages.content'
+import { editableDesignContract as dc, editablePalette as pal } from '@/editable/layouts/design-contract'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
 
 export default function AboutPage() {
+  const about = pagesContent.about
+  const stats = pagesContent.home.hero.stats
+  const [missionPara, visionPara] = about.paragraphs
+
   return (
     <EditableSiteShell>
-      <main className="bg-[#f7f4ef] text-[#111]">
-        <section className="border-b border-black bg-[#c92f2f] text-white">
-          <div className="mx-auto max-w-[var(--editable-container)] px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-            <p className="text-xs font-black uppercase tracking-[0.28em]">{pagesContent.about.badge}</p>
-            <h1 className="editorial-brand mt-5 max-w-5xl text-6xl font-black leading-[0.92] tracking-[-0.055em] sm:text-8xl">
-              Independent media, built for clear stories.
-            </h1>
+      <main className={`${pal.pageBg} ${pal.pageText}`}>
+        {/* hero */}
+        <section className="relative overflow-hidden">
+          <div className="pointer-events-none absolute -right-40 -top-40 h-[34rem] w-[34rem] rounded-full bg-[var(--slot4-accent)] opacity-[0.09] blur-[130px]" />
+          <div className={`relative ${dc.shell.section} pb-8 pt-16 text-center sm:pt-20`} data-reveal>
+            <p className={`${dc.type.eyebrow} ${pal.accentText}`}>{about.badge}</p>
+            <h1 className={`mx-auto mt-4 max-w-4xl ${dc.type.heroTitle}`}>{about.title}</h1>
+            <p className={`mx-auto mt-5 max-w-2xl text-base leading-8 ${pal.mutedText} sm:text-lg`}>{about.description}</p>
           </div>
         </section>
 
-        <section className="mx-auto grid max-w-[var(--editable-container)] border-x border-black bg-white lg:grid-cols-[1.45fr_0.55fr]">
-          <article className="border-b border-black p-7 sm:p-10 lg:border-b-0 lg:border-r lg:p-16">
-            <p className="text-sm font-black uppercase tracking-[0.2em] text-[#c92f2f]">About {SITE_CONFIG.name}</p>
-            <p className="editorial-serif mt-6 text-3xl font-bold leading-[1.25] sm:text-4xl">{pagesContent.about.description}</p>
-            <div className="article-content mt-10 space-y-6">
-              {pagesContent.about.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-            </div>
-          </article>
-          <aside className="grid bg-[#f7f4ef]">
-            {pagesContent.about.values.map((value, index) => (
-              <div key={value.title} className="border-b border-black p-7 last:border-b-0 sm:p-9">
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-[#c92f2f]">0{index + 1}</p>
-                <h2 className="editorial-serif mt-4 text-3xl font-black leading-tight">{value.title}</h2>
-                <p className="mt-4 text-sm leading-7 text-black/65">{value.description}</p>
+        {/* impact stats band */}
+        <section className={dc.shell.section}>
+          <div className="grid gap-4 rounded-[2rem] border border-[var(--editable-border)] bg-white p-8 shadow-[0_14px_40px_rgba(26,20,34,0.07)] sm:grid-cols-2 lg:grid-cols-4" data-reveal>
+            {stats.map((stat) => (
+              <div key={stat.label} className="text-center sm:text-left">
+                <p className="beacon-display text-3xl font-extrabold tracking-[-0.03em] text-[var(--slot4-accent)] sm:text-4xl">{stat.value}</p>
+                <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--slot4-soft-muted-text)]">{stat.label}</p>
               </div>
             ))}
-          </aside>
+          </div>
         </section>
 
-        <section className="border-y border-black bg-[#171717] text-white">
-          <div className="mx-auto flex max-w-[var(--editable-container)] flex-col gap-6 px-4 py-12 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-            <h2 className="editorial-brand max-w-3xl text-4xl font-black leading-none sm:text-5xl">Read the stories shaping the conversation.</h2>
-            <Link href="/search" className="inline-flex w-fit bg-[#c92f2f] px-6 py-4 text-xs font-black uppercase tracking-[0.18em]">Explore the archive</Link>
+        {/* mission + vision */}
+        <section className={`${dc.shell.section} ${dc.shell.sectionY}`}>
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className={`rounded-3xl border ${pal.border} ${pal.surfaceBg} p-8 ${pal.shadow}`} data-reveal>
+              <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--slot4-accent-soft)] text-[var(--slot4-accent)]"><Target className="h-6 w-6" /></span>
+              <h2 className="beacon-display mt-5 text-2xl font-extrabold tracking-[-0.02em]">Our mission</h2>
+              <p className={`mt-3 text-base leading-8 ${pal.mutedText}`}>{missionPara}</p>
+            </div>
+            <div className={`rounded-3xl border ${pal.border} ${pal.surfaceBg} p-8 ${pal.shadow}`} data-reveal style={{ ['--reveal-delay' as string]: '90ms' }}>
+              <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--slot4-accent-soft)] text-[var(--slot4-accent)]"><Compass className="h-6 w-6" /></span>
+              <h2 className="beacon-display mt-5 text-2xl font-extrabold tracking-[-0.02em]">Our vision</h2>
+              <p className={`mt-3 text-base leading-8 ${pal.mutedText}`}>{visionPara || missionPara}</p>
+            </div>
+          </div>
+
+          {/* why choose us */}
+          <div className="mt-16">
+            <div className="mx-auto max-w-2xl text-center" data-reveal>
+              <p className={`${dc.type.eyebrow} ${pal.accentText}`}>Why choose us</p>
+              <h2 className={`mt-3 ${dc.type.sectionTitle}`}>Built for reach, clarity, and proof of coverage.</h2>
+            </div>
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
+              {about.values.map((value, index) => (
+                <div key={value.title} data-reveal style={{ ['--reveal-delay' as string]: `${index * 90}ms` }} className={`group rounded-3xl border ${pal.border} ${pal.surfaceBg} p-8 ${pal.shadow} ${dc.motion.lift}`}>
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--slot4-accent-soft)] text-[var(--slot4-accent)] transition group-hover:bg-[var(--slot4-accent)] group-hover:text-white"><Sparkles className="h-5 w-5" /></span>
+                  <h3 className="beacon-display mt-5 text-xl font-extrabold tracking-[-0.02em]">{value.title}</h3>
+                  <p className={`mt-3 text-sm leading-7 ${pal.mutedText}`}>{value.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* closing CTA */}
+        <section className={`${pal.warmBg} pb-20`}>
+          <div className={dc.shell.section}>
+            <div className="signal-on-dark relative overflow-hidden rounded-[2rem] bg-[var(--slot4-dark-bg)] px-6 py-14 text-white sm:px-12 lg:px-16" data-reveal>
+              <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-[var(--slot4-accent)] opacity-40 blur-[90px]" />
+              <div className="relative flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+                <h2 className="beacon-display max-w-2xl text-3xl font-extrabold leading-[1.08] tracking-[-0.03em] sm:text-4xl">Put your next announcement in front of the right newsrooms.</h2>
+                <div className="flex flex-wrap gap-3">
+                  <Link href="/create" className="inline-flex items-center gap-2 rounded-full bg-[var(--slot4-accent-2)] px-7 py-3.5 text-sm font-bold text-[var(--slot4-dark-bg)] transition hover:-translate-y-0.5">Distribute a release <ArrowRight className="h-4 w-4" /></Link>
+                  <Link href="/updates" className="inline-flex items-center gap-2 rounded-full border border-white/25 px-7 py-3.5 text-sm font-bold text-white transition hover:bg-white/10">Browse the newsroom</Link>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       </main>
